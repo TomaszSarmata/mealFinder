@@ -23,10 +23,10 @@ function searchMeal(e) {
     fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
       .then((res) => res.json())
       .then((data) => console.log(data));
+    resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;
   } else {
     alert("please type in the name of the meal");
   }
-  console.log(term);
 }
 
 // async function searchMeal(e) {
