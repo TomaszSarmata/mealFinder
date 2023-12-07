@@ -43,6 +43,9 @@ function searchMeal(e) {
             .join("");
         }
       });
+
+    //clear search text
+    search.value = "";
   } else {
     alert("please type in the name of the meal");
   }
