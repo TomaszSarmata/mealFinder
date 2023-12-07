@@ -22,29 +22,31 @@ function searchMeal(e) {
   if (term.trim()) {
     fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
       .then((res) => res.json())
-      .then((data) => console.log(data));
-    resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;
+      .then((data) => {
+        console.log(data);
+        resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;
+        if (data.meals == null) {
+          resultHeading.innerHTML = `<p>No results found for "${term}". Try again!</p>`;
+        } else {
+          mealsEl.innerHTML = data.meals
+            .map(
+              (meal) => `
+            <div class="meal">
+              <img src="${meal.strMealThumb}" alt="${meal.strMeal}}"/>
+              <div class="meal-info" data-mealID="${meal.idMeal}">
+                <h3>${meal.strMeal}</h3>
+              </div>
+             
+            </div>
+          `
+            )
+            .join("");
+        }
+      });
   } else {
     alert("please type in the name of the meal");
   }
 }
-
-// async function searchMeal(e) {
-//   e.preventDefault();
-//   const response = await fetch(
-//     "https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata"
-//   );
-//   const data = await response.json();
-//   console.log(data.meals[0].strMealThumb);
-//   updateUI(data);
-// }
-
-// function updateUI(data) {
-//   let mealName = data.meals[0].strMeal;
-//   resultHeading.innerText = mealName;
-//   let mealImgUrl = data.meals[0].strMealThumb;
-//   mealsEl.innerHTML = `<img src="${mealImgUrl}"/> <img src="${mealImgUrl}"/> <img src="${mealImgUrl}"/> <img src="${mealImgUrl}"/>`;
-// }
 
 //Event Listeners
 submit.addEventListener("submit", searchMeal);
