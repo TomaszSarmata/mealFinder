@@ -53,3 +53,8 @@ function searchMeal(e) {
 
 //Event Listeners
 submit.addEventListener("submit", searchMeal);
+mealsEl.addEventListener("click", (e) => {
+  const mealInfo = e.path.find((item) => {
+    console.log(item);
+  });
+});
