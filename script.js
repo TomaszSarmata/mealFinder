@@ -51,6 +51,55 @@ function searchMeal(e) {
   }
 }
 
+//Fetch meal by id
+function getMealByID(tookMealIDFromClickEvent) {
+  fetch(
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${tookMealIDFromClickEvent}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const theMealFromAPI = data.meals[0];
+
+      addMealToDOM(theMealFromAPI);
+    });
+}
+
+// Add meal to DOM
+function addMealToDOM(theMealFromAPI) {
+  const ingredients = [];
+
+  for (let i = 1; i <= 20; i++) {
+    if (theMealFromAPI[`strIngredient${i}`]) {
+      ingredients.push(
+        `${theMealFromAPI[`strIngredient${i}`]} - ${
+          theMealFromAPI[`strMeassure${i}`]
+        }`
+      );
+    } else {
+      break;
+    }
+  }
+  single_mealEl.innerHTML = `
+  <div class="single-meal">
+    <h1>${theMealFromAPI.strMeal}</h1>
+    <img src=${theMealFromAPI.strMealThumb} />
+    <div class="single-meal-info">
+      ${
+        theMealFromAPI.strCategory ? `<p>${theMealFromAPI.strCategory}</p>` : ""
+      }
+      ${theMealFromAPI.strArea ? `<p>${theMealFromAPI.strArea}</p>` : ""}
+    </div>
+    <div class="main">
+      <p>${theMealFromAPI.strInstructions}</p>
+      <h2>Ingredients</h2>
+      <ul>
+        ${ingredients.map((ingredient) => `<li>${ingredient}</li>`).join("")}
+      </ul>
+    </div>
+  </div>
+  `;
+}
+
 //Event Listeners
 submit.addEventListener("submit", searchMeal);
 mealsEl.addEventListener("click", (e) => {
@@ -65,5 +114,6 @@ mealsEl.addEventListener("click", (e) => {
   if (mealInfo) {
     const mealID = mealInfo.getAttribute("data-mealID");
     console.log(mealID);
+    getMealByID(mealID); //took mealID from data attribute and will pass it on to the fetch above to get more data for a one specific meal
   }
 });
