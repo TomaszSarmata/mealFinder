@@ -64,6 +64,20 @@ function getMealByID(tookMealIDFromClickEvent) {
     });
 }
 
+//fetch random meal
+function fetchRandomMeal() {
+  //clear meal and heading
+  mealsEl.innerHTML = "";
+  resultHeading.innerHTML = "";
+  //fetching here
+  fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
+    .then((response) => response.json())
+    .then((data) => {
+      const randomMeal = data.meals[0];
+      addMealToDOM(randomMeal);
+    });
+}
+
 // Add meal to DOM
 function addMealToDOM(theMealFromAPI) {
   const ingredients = [];
@@ -102,6 +116,8 @@ function addMealToDOM(theMealFromAPI) {
 
 //Event Listeners
 submit.addEventListener("submit", searchMeal);
+random.addEventListener("click", fetchRandomMeal);
+
 mealsEl.addEventListener("click", (e) => {
   const mealInfo = e.composedPath().find((item) => {
     if (item.classList) {
